@@ -1,18 +1,17 @@
-# Specify the base image
-FROM mcr.microsoft.com/azure-functions/python:4
+FROM python:3.9-slim
 
-# Set the working directory
+RUN apt-get update && apt-get install -y \
+    unixodbc-dev \
+    gcc \
+    g++ \
+    && apt-get clean
+
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
 COPY . /app
 
-# Install dependencies
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose the port the app will run on
 EXPOSE 7071
 
-# Command to run the app
 CMD ["python", "app.py"]
